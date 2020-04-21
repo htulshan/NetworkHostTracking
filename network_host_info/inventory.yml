@@ -9,71 +9,59 @@ hosts:
       - core
       - router
     device_type: cisco_ios
-    mgmt_interface: Eth0/3
   172.16.147.202:
     groups:
       - all
       - core
       - router
     device_type: cisco_ios
-    mgmt_interface: Eth0/3
   172.16.147.203:
     groups:
       - all
       - dist
       - switch
-    mgmt_interface: Eth2/3
   172.16.147.204:
     groups:
       - all
       - dist
       - switch
-    mgmt_interface: Eth2/3
   172.16.147.205:
     groups:
       - all
       - access
       - switch
-    mgmt_interface: Eth0/3
   172.16.147.206:
     groups:
       - all
       - access
       - switch
-    mgmt_interface: Eth0/3
   172.16.147.207:
     groups:
       - all
       - access
       - switch
-    mgmt_interface: Eth0/3
   172.16.147.208:
     groups:
       - all
       - access
       - switch
-    mgmt_interface: Eth0/3
   172.16.147.209:
     groups:
       - all
       - access
       - switch
-    mgmt_interface: Eth0/3
   172.16.147.210:
     groups:
       - all
       - access
       - switch
-    mgmt_interface: Eth0/3
   172.16.147.211:
     groups:
       - all
       - access
       - switch
-    mgmt_interface: Eth0/3
   172.16.147.212:
     groups:
       - all
       - access
       - switch
-    mgmt_interface: Eth0/3
