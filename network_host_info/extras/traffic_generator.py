@@ -2,7 +2,7 @@ from netmiko import ConnectHandler
 from time import sleep
 device_data = {
     'host': '172.16.147.201',
-    'device_type': 'cisco_ios',
+    'device_type': 'autodetect',
     'username': 'admin',
     'password': 'cisco'
 }

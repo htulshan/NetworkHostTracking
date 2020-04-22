@@ -8,7 +8,11 @@ import yaml
 from netmiko import ConnectHandler
 from tabulate import tabulate
 
-logging.basicConfig(format='%(message)s', level=logging.INFO)
+logging.basicConfig(format='%(message)s', level=logging.WARNING)
+
+
+class InvalidIP(Exception):
+    pass
 
 
 class TrackHost:
@@ -106,7 +110,7 @@ class TrackHost:
                 output.append(ssh.send_command(command, use_textfsm=text_fsm))
 
         except Exception:
-            logging.info(f"Unable to connect to device {device_params['ip']}, this device will be skipped")
+            logging.warning(f"ERROR: Unable to connect to device {device_params['ip']}, this device will be skipped")
             output = []  # empty list
         else:
             ssh.disconnect()
@@ -237,6 +241,9 @@ class TrackHost:
         :return: None
         """
         host_access_ports = {}
+
+        if not all(map(self.check_if_ip_address, hosts)):
+            raise InvalidIP("Invalid IP entered")
 
         # for every host
         for host in hosts:
