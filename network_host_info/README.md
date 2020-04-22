@@ -1,302 +1,145 @@
-Sample output
+BELOW is the shell sample output.
+A topology of the lab network has been attached to the repo.
 
-17:04 $ time python host_info.py 
-+---------------+----------------+----------------+--------+-------------+----------------------------------------------------------------+
-| IP            | MAC            | switch         | port   | port_type   | show_command                                                   |
-+===============+================+================+========+=============+================================================================+
-| 192.168.20.40 | 0050.7966.680e | 172.16.147.205 | Et0/2  | access      | Building configuration...                                      |
-|               |                |                |        |             |                                                                |
-|               |                |                |        |             | Current configuration : 80 bytes                               |
-|               |                |                |        |             | !                                                              |
-|               |                |                |        |             | interface Ethernet0/2                                          |
-|               |                |                |        |             |  switchport access vlan 20                                     |
-|               |                |                |        |             |  switchport mode access                                        |
-|               |                |                |        |             | end                                                            |
-|               |                |                |        |             |                                                                |
-|               |                |                |        |             | Name: Et0/2                                                    |
-|               |                |                |        |             | Switchport: Enabled                                            |
-|               |                |                |        |             | Administrative Mode: static access                             |
-|               |                |                |        |             | Operational Mode: static access                                |
-|               |                |                |        |             | Administrative Trunking Encapsulation: negotiate               |
-|               |                |                |        |             | Operational Trunking Encapsulation: native                     |
-|               |                |                |        |             | Negotiation of Trunking: Off                                   |
-|               |                |                |        |             | Access Mode VLAN: 20 (VLAN0020)                                |
-|               |                |                |        |             | Trunking Native Mode VLAN: 1 (default)                         |
-|               |                |                |        |             | Administrative Native VLAN tagging: enabled                    |
-|               |                |                |        |             | Voice VLAN: none                                               |
-|               |                |                |        |             | Administrative private-vlan host-association: none             |
-|               |                |                |        |             | Administrative private-vlan mapping: none                      |
-|               |                |                |        |             | Administrative private-vlan trunk native VLAN: none            |
-|               |                |                |        |             | Administrative private-vlan trunk Native VLAN tagging: enabled |
-|               |                |                |        |             | Administrative private-vlan trunk encapsulation: dot1q         |
-|               |                |                |        |             | Administrative private-vlan trunk normal VLANs: none           |
-|               |                |                |        |             | Administrative private-vlan trunk associations: none           |
-|               |                |                |        |             | Administrative private-vlan trunk mappings: none               |
-|               |                |                |        |             | Operational private-vlan: none                                 |
-|               |                |                |        |             | Trunking VLANs Enabled: ALL                                    |
-|               |                |                |        |             | Pruning VLANs Enabled: 2-1001                                  |
-|               |                |                |        |             | Capture Mode Disabled                                          |
-|               |                |                |        |             | Capture VLANs Allowed: ALL                                     |
-|               |                |                |        |             |                                                                |
-|               |                |                |        |             | Protected: false                                               |
-|               |                |                |        |             | Appliance trust: none                                          |
-+---------------+----------------+----------------+--------+-------------+----------------------------------------------------------------+
-| 192.168.30.41 | 0050.7966.680f | 172.16.147.206 | Et0/2  | access      | Building configuration...                                      |
-|               |                |                |        |             |                                                                |
-|               |                |                |        |             | Current configuration : 80 bytes                               |
-|               |                |                |        |             | !                                                              |
-|               |                |                |        |             | interface Ethernet0/2                                          |
-|               |                |                |        |             |  switchport access vlan 30                                     |
-|               |                |                |        |             |  switchport mode access                                        |
-|               |                |                |        |             | end                                                            |
-|               |                |                |        |             |                                                                |
-|               |                |                |        |             | Name: Et0/2                                                    |
-|               |                |                |        |             | Switchport: Enabled                                            |
-|               |                |                |        |             | Administrative Mode: static access                             |
-|               |                |                |        |             | Operational Mode: static access                                |
-|               |                |                |        |             | Administrative Trunking Encapsulation: negotiate               |
-|               |                |                |        |             | Operational Trunking Encapsulation: native                     |
-|               |                |                |        |             | Negotiation of Trunking: Off                                   |
-|               |                |                |        |             | Access Mode VLAN: 30 (VLAN0030)                                |
-|               |                |                |        |             | Trunking Native Mode VLAN: 1 (default)                         |
-|               |                |                |        |             | Administrative Native VLAN tagging: enabled                    |
-|               |                |                |        |             | Voice VLAN: none                                               |
-|               |                |                |        |             | Administrative private-vlan host-association: none             |
-|               |                |                |        |             | Administrative private-vlan mapping: none                      |
-|               |                |                |        |             | Administrative private-vlan trunk native VLAN: none            |
-|               |                |                |        |             | Administrative private-vlan trunk Native VLAN tagging: enabled |
-|               |                |                |        |             | Administrative private-vlan trunk encapsulation: dot1q         |
-|               |                |                |        |             | Administrative private-vlan trunk normal VLANs: none           |
-|               |                |                |        |             | Administrative private-vlan trunk associations: none           |
-|               |                |                |        |             | Administrative private-vlan trunk mappings: none               |
-|               |                |                |        |             | Operational private-vlan: none                                 |
-|               |                |                |        |             | Trunking VLANs Enabled: ALL                                    |
-|               |                |                |        |             | Pruning VLANs Enabled: 2-1001                                  |
-|               |                |                |        |             | Capture Mode Disabled                                          |
-|               |                |                |        |             | Capture VLANs Allowed: ALL                                     |
-|               |                |                |        |             |                                                                |
-|               |                |                |        |             | Protected: false                                               |
-|               |                |                |        |             | Appliance trust: none                                          |
-+---------------+----------------+----------------+--------+-------------+----------------------------------------------------------------+
-| 192.168.10.42 | 0050.7966.680d | 172.16.147.207 | Et0/2  | access      | Building configuration...                                      |
-|               |                |                |        |             |                                                                |
-|               |                |                |        |             | Current configuration : 80 bytes                               |
-|               |                |                |        |             | !                                                              |
-|               |                |                |        |             | interface Ethernet0/2                                          |
-|               |                |                |        |             |  switchport access vlan 10                                     |
-|               |                |                |        |             |  switchport mode access                                        |
-|               |                |                |        |             | end                                                            |
-|               |                |                |        |             |                                                                |
-|               |                |                |        |             | Name: Et0/2                                                    |
-|               |                |                |        |             | Switchport: Enabled                                            |
-|               |                |                |        |             | Administrative Mode: static access                             |
-|               |                |                |        |             | Operational Mode: static access                                |
-|               |                |                |        |             | Administrative Trunking Encapsulation: negotiate               |
-|               |                |                |        |             | Operational Trunking Encapsulation: native                     |
-|               |                |                |        |             | Negotiation of Trunking: Off                                   |
-|               |                |                |        |             | Access Mode VLAN: 10 (VLAN0010)                                |
-|               |                |                |        |             | Trunking Native Mode VLAN: 1 (default)                         |
-|               |                |                |        |             | Administrative Native VLAN tagging: enabled                    |
-|               |                |                |        |             | Voice VLAN: none                                               |
-|               |                |                |        |             | Administrative private-vlan host-association: none             |
-|               |                |                |        |             | Administrative private-vlan mapping: none                      |
-|               |                |                |        |             | Administrative private-vlan trunk native VLAN: none            |
-|               |                |                |        |             | Administrative private-vlan trunk Native VLAN tagging: enabled |
-|               |                |                |        |             | Administrative private-vlan trunk encapsulation: dot1q         |
-|               |                |                |        |             | Administrative private-vlan trunk normal VLANs: none           |
-|               |                |                |        |             | Administrative private-vlan trunk associations: none           |
-|               |                |                |        |             | Administrative private-vlan trunk mappings: none               |
-|               |                |                |        |             | Operational private-vlan: none                                 |
-|               |                |                |        |             | Trunking VLANs Enabled: ALL                                    |
-|               |                |                |        |             | Pruning VLANs Enabled: 2-1001                                  |
-|               |                |                |        |             | Capture Mode Disabled                                          |
-|               |                |                |        |             | Capture VLANs Allowed: ALL                                     |
-|               |                |                |        |             |                                                                |
-|               |                |                |        |             | Protected: false                                               |
-|               |                |                |        |             | Appliance trust: none                                          |
-+---------------+----------------+----------------+--------+-------------+----------------------------------------------------------------+
-| 192.168.20.51 | 0050.7966.6810 | 172.16.147.208 | Et0/2  | access      | Building configuration...                                      |
-|               |                |                |        |             |                                                                |
-|               |                |                |        |             | Current configuration : 80 bytes                               |
-|               |                |                |        |             | !                                                              |
-|               |                |                |        |             | interface Ethernet0/2                                          |
-|               |                |                |        |             |  switchport access vlan 20                                     |
-|               |                |                |        |             |  switchport mode access                                        |
-|               |                |                |        |             | end                                                            |
-|               |                |                |        |             |                                                                |
-|               |                |                |        |             | Name: Et0/2                                                    |
-|               |                |                |        |             | Switchport: Enabled                                            |
-|               |                |                |        |             | Administrative Mode: static access                             |
-|               |                |                |        |             | Operational Mode: static access                                |
-|               |                |                |        |             | Administrative Trunking Encapsulation: negotiate               |
-|               |                |                |        |             | Operational Trunking Encapsulation: native                     |
-|               |                |                |        |             | Negotiation of Trunking: Off                                   |
-|               |                |                |        |             | Access Mode VLAN: 20 (VLAN0020)                                |
-|               |                |                |        |             | Trunking Native Mode VLAN: 1 (default)                         |
-|               |                |                |        |             | Administrative Native VLAN tagging: enabled                    |
-|               |                |                |        |             | Voice VLAN: none                                               |
-|               |                |                |        |             | Administrative private-vlan host-association: none             |
-|               |                |                |        |             | Administrative private-vlan mapping: none                      |
-|               |                |                |        |             | Administrative private-vlan trunk native VLAN: none            |
-|               |                |                |        |             | Administrative private-vlan trunk Native VLAN tagging: enabled |
-|               |                |                |        |             | Administrative private-vlan trunk encapsulation: dot1q         |
-|               |                |                |        |             | Administrative private-vlan trunk normal VLANs: none           |
-|               |                |                |        |             | Administrative private-vlan trunk associations: none           |
-|               |                |                |        |             | Administrative private-vlan trunk mappings: none               |
-|               |                |                |        |             | Operational private-vlan: none                                 |
-|               |                |                |        |             | Trunking VLANs Enabled: ALL                                    |
-|               |                |                |        |             | Pruning VLANs Enabled: 2-1001                                  |
-|               |                |                |        |             | Capture Mode Disabled                                          |
-|               |                |                |        |             | Capture VLANs Allowed: ALL                                     |
-|               |                |                |        |             |                                                                |
-|               |                |                |        |             | Protected: false                                               |
-|               |                |                |        |             | Appliance trust: none                                          |
-+---------------+----------------+----------------+--------+-------------+----------------------------------------------------------------+
-| 192.168.30.55 | 0050.7966.6811 | 172.16.147.209 | Et0/2  | access      | Building configuration...                                      |
-|               |                |                |        |             |                                                                |
-|               |                |                |        |             | Current configuration : 80 bytes                               |
-|               |                |                |        |             | !                                                              |
-|               |                |                |        |             | interface Ethernet0/2                                          |
-|               |                |                |        |             |  switchport access vlan 30                                     |
-|               |                |                |        |             |  switchport mode access                                        |
-|               |                |                |        |             | end                                                            |
-|               |                |                |        |             |                                                                |
-|               |                |                |        |             | Name: Et0/2                                                    |
-|               |                |                |        |             | Switchport: Enabled                                            |
-|               |                |                |        |             | Administrative Mode: static access                             |
-|               |                |                |        |             | Operational Mode: static access                                |
-|               |                |                |        |             | Administrative Trunking Encapsulation: negotiate               |
-|               |                |                |        |             | Operational Trunking Encapsulation: native                     |
-|               |                |                |        |             | Negotiation of Trunking: Off                                   |
-|               |                |                |        |             | Access Mode VLAN: 30 (VLAN0030)                                |
-|               |                |                |        |             | Trunking Native Mode VLAN: 1 (default)                         |
-|               |                |                |        |             | Administrative Native VLAN tagging: enabled                    |
-|               |                |                |        |             | Voice VLAN: none                                               |
-|               |                |                |        |             | Administrative private-vlan host-association: none             |
-|               |                |                |        |             | Administrative private-vlan mapping: none                      |
-|               |                |                |        |             | Administrative private-vlan trunk native VLAN: none            |
-|               |                |                |        |             | Administrative private-vlan trunk Native VLAN tagging: enabled |
-|               |                |                |        |             | Administrative private-vlan trunk encapsulation: dot1q         |
-|               |                |                |        |             | Administrative private-vlan trunk normal VLANs: none           |
-|               |                |                |        |             | Administrative private-vlan trunk associations: none           |
-|               |                |                |        |             | Administrative private-vlan trunk mappings: none               |
-|               |                |                |        |             | Operational private-vlan: none                                 |
-|               |                |                |        |             | Trunking VLANs Enabled: ALL                                    |
-|               |                |                |        |             | Pruning VLANs Enabled: 2-1001                                  |
-|               |                |                |        |             | Capture Mode Disabled                                          |
-|               |                |                |        |             | Capture VLANs Allowed: ALL                                     |
-|               |                |                |        |             |                                                                |
-|               |                |                |        |             | Protected: false                                               |
-|               |                |                |        |             | Appliance trust: none                                          |
-+---------------+----------------+----------------+--------+-------------+----------------------------------------------------------------+
-| 192.168.10.80 | 0050.7966.6812 | 172.16.147.210 | Et0/2  | access      | Building configuration...                                      |
-|               |                |                |        |             |                                                                |
-|               |                |                |        |             | Current configuration : 80 bytes                               |
-|               |                |                |        |             | !                                                              |
-|               |                |                |        |             | interface Ethernet0/2                                          |
-|               |                |                |        |             |  switchport access vlan 10                                     |
-|               |                |                |        |             |  switchport mode access                                        |
-|               |                |                |        |             | end                                                            |
-|               |                |                |        |             |                                                                |
-|               |                |                |        |             | Name: Et0/2                                                    |
-|               |                |                |        |             | Switchport: Enabled                                            |
-|               |                |                |        |             | Administrative Mode: static access                             |
-|               |                |                |        |             | Operational Mode: static access                                |
-|               |                |                |        |             | Administrative Trunking Encapsulation: negotiate               |
-|               |                |                |        |             | Operational Trunking Encapsulation: native                     |
-|               |                |                |        |             | Negotiation of Trunking: Off                                   |
-|               |                |                |        |             | Access Mode VLAN: 10 (VLAN0010)                                |
-|               |                |                |        |             | Trunking Native Mode VLAN: 1 (default)                         |
-|               |                |                |        |             | Administrative Native VLAN tagging: enabled                    |
-|               |                |                |        |             | Voice VLAN: none                                               |
-|               |                |                |        |             | Administrative private-vlan host-association: none             |
-|               |                |                |        |             | Administrative private-vlan mapping: none                      |
-|               |                |                |        |             | Administrative private-vlan trunk native VLAN: none            |
-|               |                |                |        |             | Administrative private-vlan trunk Native VLAN tagging: enabled |
-|               |                |                |        |             | Administrative private-vlan trunk encapsulation: dot1q         |
-|               |                |                |        |             | Administrative private-vlan trunk normal VLANs: none           |
-|               |                |                |        |             | Administrative private-vlan trunk associations: none           |
-|               |                |                |        |             | Administrative private-vlan trunk mappings: none               |
-|               |                |                |        |             | Operational private-vlan: none                                 |
-|               |                |                |        |             | Trunking VLANs Enabled: ALL                                    |
-|               |                |                |        |             | Pruning VLANs Enabled: 2-1001                                  |
-|               |                |                |        |             | Capture Mode Disabled                                          |
-|               |                |                |        |             | Capture VLANs Allowed: ALL                                     |
-|               |                |                |        |             |                                                                |
-|               |                |                |        |             | Protected: false                                               |
-|               |                |                |        |             | Appliance trust: none                                          |
-+---------------+----------------+----------------+--------+-------------+----------------------------------------------------------------+
-| 192.168.20.66 | 0050.7966.6813 | 172.16.147.211 | Et0/2  | access      | Building configuration...                                      |
-|               |                |                |        |             |                                                                |
-|               |                |                |        |             | Current configuration : 80 bytes                               |
-|               |                |                |        |             | !                                                              |
-|               |                |                |        |             | interface Ethernet0/2                                          |
-|               |                |                |        |             |  switchport access vlan 20                                     |
-|               |                |                |        |             |  switchport mode access                                        |
-|               |                |                |        |             | end                                                            |
-|               |                |                |        |             |                                                                |
-|               |                |                |        |             | Name: Et0/2                                                    |
-|               |                |                |        |             | Switchport: Enabled                                            |
-|               |                |                |        |             | Administrative Mode: static access                             |
-|               |                |                |        |             | Operational Mode: static access                                |
-|               |                |                |        |             | Administrative Trunking Encapsulation: negotiate               |
-|               |                |                |        |             | Operational Trunking Encapsulation: native                     |
-|               |                |                |        |             | Negotiation of Trunking: Off                                   |
-|               |                |                |        |             | Access Mode VLAN: 20 (VLAN0020)                                |
-|               |                |                |        |             | Trunking Native Mode VLAN: 1 (default)                         |
-|               |                |                |        |             | Administrative Native VLAN tagging: enabled                    |
-|               |                |                |        |             | Voice VLAN: none                                               |
-|               |                |                |        |             | Administrative private-vlan host-association: none             |
-|               |                |                |        |             | Administrative private-vlan mapping: none                      |
-|               |                |                |        |             | Administrative private-vlan trunk native VLAN: none            |
-|               |                |                |        |             | Administrative private-vlan trunk Native VLAN tagging: enabled |
-|               |                |                |        |             | Administrative private-vlan trunk encapsulation: dot1q         |
-|               |                |                |        |             | Administrative private-vlan trunk normal VLANs: none           |
-|               |                |                |        |             | Administrative private-vlan trunk associations: none           |
-|               |                |                |        |             | Administrative private-vlan trunk mappings: none               |
-|               |                |                |        |             | Operational private-vlan: none                                 |
-|               |                |                |        |             | Trunking VLANs Enabled: ALL                                    |
-|               |                |                |        |             | Pruning VLANs Enabled: 2-1001                                  |
-|               |                |                |        |             | Capture Mode Disabled                                          |
-|               |                |                |        |             | Capture VLANs Allowed: ALL                                     |
-|               |                |                |        |             |                                                                |
-|               |                |                |        |             | Protected: false                                               |
-|               |                |                |        |             | Appliance trust: none                                          |
-+---------------+----------------+----------------+--------+-------------+----------------------------------------------------------------+
-| 192.168.30.69 | 0050.7966.6814 | 172.16.147.212 | Et0/2  | access      | Building configuration...                                      |
-|               |                |                |        |             |                                                                |
-|               |                |                |        |             | Current configuration : 80 bytes                               |
-|               |                |                |        |             | !                                                              |
-|               |                |                |        |             | interface Ethernet0/2                                          |
-|               |                |                |        |             |  switchport access vlan 30                                     |
-|               |                |                |        |             |  switchport mode access                                        |
-|               |                |                |        |             | end                                                            |
-|               |                |                |        |             |                                                                |
-|               |                |                |        |             | Name: Et0/2                                                    |
-|               |                |                |        |             | Switchport: Enabled                                            |
-|               |                |                |        |             | Administrative Mode: static access                             |
-|               |                |                |        |             | Operational Mode: static access                                |
-|               |                |                |        |             | Administrative Trunking Encapsulation: negotiate               |
-|               |                |                |        |             | Operational Trunking Encapsulation: native                     |
-|               |                |                |        |             | Negotiation of Trunking: Off                                   |
-|               |                |                |        |             | Access Mode VLAN: 30 (VLAN0030)                                |
-|               |                |                |        |             | Trunking Native Mode VLAN: 1 (default)                         |
-|               |                |                |        |             | Administrative Native VLAN tagging: enabled                    |
-|               |                |                |        |             | Voice VLAN: none                                               |
-|               |                |                |        |             | Administrative private-vlan host-association: none             |
-|               |                |                |        |             | Administrative private-vlan mapping: none                      |
-|               |                |                |        |             | Administrative private-vlan trunk native VLAN: none            |
-|               |                |                |        |             | Administrative private-vlan trunk Native VLAN tagging: enabled |
-|               |                |                |        |             | Administrative private-vlan trunk encapsulation: dot1q         |
-|               |                |                |        |             | Administrative private-vlan trunk normal VLANs: none           |
-|               |                |                |        |             | Administrative private-vlan trunk associations: none           |
-|               |                |                |        |             | Administrative private-vlan trunk mappings: none               |
-|               |                |                |        |             | Operational private-vlan: none                                 |
-|               |                |                |        |             | Trunking VLANs Enabled: ALL                                    |
-|               |                |                |        |             | Pruning VLANs Enabled: 2-1001                                  |
-|               |                |                |        |             | Capture Mode Disabled                                          |
-|               |                |                |        |             | Capture VLANs Allowed: ALL                                     |
-|               |                |                |        |             |                                                                |
-|               |                |                |        |             | Protected: false                                               |
-|               |                |                |        |             | Appliance trust: none                                          |
-+---------------+----------------+----------------+--------+-------------+----------------------------------------------------------------+
+htulshan@htulshan:~$ cd network-automation-scripts/python_projects/network_host_info/
+✔ ~/network-automation-scripts/python_projects/network_host_info [master|✔] 
+22:04 $ source ~/virtualenvs/network-automation/bin/activate
+(network-automation) ✔ ~/network-automation-scripts/python_projects/network_host_info [master|✔] 
+22:04 $ ls -al
+total 84
+drwxr-xr-x 4 htulshan htulshan  4096 Apr 21 22:38 .
+drwxr-xr-x 4 htulshan htulshan  4096 Apr 17 17:05 ..
+drwxrwxr-x 2 htulshan htulshan  4096 Apr 21 18:47 extras
+-rw-rw-r-- 1 htulshan htulshan 12686 Apr 21 22:38 host_info.py
+-rw-rw-r-- 1 htulshan htulshan   991 Apr 21 19:09 inventory.yml
+drwxr-xr-x 2 htulshan htulshan  4096 Apr 21 22:38 __pycache__
+-rw-rw-r-- 1 htulshan htulshan 41909 Apr 20 17:54 README.md
+-rw-rw-r-- 1 htulshan htulshan    66 Apr 21 18:50 requirements
+(network-automation) ✔ ~/network-automation-scripts/python_projects/network_host_info [master|✔] 
+22:04 $ ipython
+Python 3.6.9 (default, Nov  7 2019, 10:44:02) 
+Type 'copyright', 'credits' or 'license' for more information
+IPython 7.13.0 -- An enhanced Interactive Python. Type '?' for help.
+
+In [1]: from host_info import TrackHost                                                                                                                                                                            
+
+In [2]: test1 = TrackHost()                                                                                                                                                                                        
+
+In [3]: test1.load()                                                                                                                                                                                               
+
+Connected (version 1.99, client Cisco-1.25)
+Authentication (password) successful!
+Connected (version 1.99, client Cisco-1.25)
+Authentication (password) successful!
+In [4]:                                                                                                                                                                                                            
+
+In [4]: test1.track_and_print(['192.168.20.40'])                                                                                                                                                                   
++---------------+----------------+----------------+--------+-------------+
+| IP            | MAC            | switch         | port   | port_type   |
++===============+================+================+========+=============+
+| 192.168.20.40 | 0050.7966.680e | 172.16.147.205 | Et0/2  | access      |
++---------------+----------------+----------------+--------+-------------+
+
+In [5]: test1.track_and_print(['192.168.20.40', '192.168.10.42'])                                                                                                                                                  
++---------------+----------------+----------------+--------+-------------+
+| IP            | MAC            | switch         | port   | port_type   |
++===============+================+================+========+=============+
+| 192.168.20.40 | 0050.7966.680e | 172.16.147.205 | Et0/2  | access      |
++---------------+----------------+----------------+--------+-------------+
+| 192.168.10.42 | 0050.7966.680d | 172.16.147.207 | Et0/2  | access      |
++---------------+----------------+----------------+--------+-------------+
+
+In [6]: test1.track_and_print(['192.168.20.40', '192.168.10.42'], port_type='trunk)                                                                                                                                
+  File "<ipython-input-6-e1b97498752d>", line 1
+    test1.track_and_print(['192.168.20.40', '192.168.10.42'], port_type='trunk)
+                                                                               ^
+SyntaxError: EOL while scanning string literal
+
+
+In [7]: test1.track_and_print(['192.168.20.40', '192.168.10.42'], port_type='trunk')                                                                                                                               
++---------------+----------------+----------------+--------+-------------+
+| IP            | MAC            | switch         | port   | port_type   |
++===============+================+================+========+=============+
+| 192.168.20.40 | 0050.7966.680e | 172.16.147.203 | Et0/3  | trunk       |
++---------------+----------------+----------------+--------+-------------+
+| 192.168.10.42 | 0050.7966.680d | 172.16.147.203 | Et1/1  | trunk       |
++---------------+----------------+----------------+--------+-------------+
+
+In [8]: test1.track_and_print(['192.168.20.40', '192.168.10.42'], port_type='all')                                                                                                                                 
++---------------+----------------+----------------+--------+-------------+
+| IP            | MAC            | switch         | port   | port_type   |
++===============+================+================+========+=============+
+| 192.168.20.40 | 0050.7966.680e | 172.16.147.203 | Et0/3  | trunk       |
++---------------+----------------+----------------+--------+-------------+
+| 192.168.20.40 | 0050.7966.680e | 172.16.147.205 | Et0/2  | access      |
++---------------+----------------+----------------+--------+-------------+
+| 192.168.10.42 | 0050.7966.680d | 172.16.147.203 | Et1/1  | trunk       |
++---------------+----------------+----------------+--------+-------------+
+| 192.168.10.42 | 0050.7966.680d | 172.16.147.207 | Et0/2  | access      |
++---------------+----------------+----------------+--------+-------------+
+
+In [9]: test1.track_command_print(['192.168.20.40', '192.168.10.42'], ['show run interface {}',])                                                                                                                  
++---------------+----------------+----------------+--------+-------------+----------------------------------+
+| IP            | MAC            | switch         | port   | port_type   | show_command                     |
++===============+================+================+========+=============+==================================+
+| 192.168.20.40 | 0050.7966.680e | 172.16.147.205 | Et0/2  | access      | Building configuration...        |
+|               |                |                |        |             |                                  |
+|               |                |                |        |             | Current configuration : 80 bytes |
+|               |                |                |        |             | !                                |
+|               |                |                |        |             | interface Ethernet0/2            |
+|               |                |                |        |             |  switchport access vlan 20       |
+|               |                |                |        |             |  switchport mode access          |
+|               |                |                |        |             | end                              |
++---------------+----------------+----------------+--------+-------------+----------------------------------+
+| 192.168.10.42 | 0050.7966.680d | 172.16.147.207 | Et0/2  | access      | Building configuration...        |
+|               |                |                |        |             |                                  |
+|               |                |                |        |             | Current configuration : 80 bytes |
+|               |                |                |        |             | !                                |
+|               |                |                |        |             | interface Ethernet0/2            |
+|               |                |                |        |             |  switchport access vlan 10       |
+|               |                |                |        |             |  switchport mode access          |
+|               |                |                |        |             | end                              |
++---------------+----------------+----------------+--------+-------------+----------------------------------+
+
+In [10]: test1.track_command_print(['192.168.20.40', '192.168.10.42'], ['show run interface {}', 'show mac address-table interface {}',])                                                                          
++---------------+----------------+----------------+--------+-------------+---------------------------------------------+
+| IP            | MAC            | switch         | port   | port_type   | show_command                                |
++===============+================+================+========+=============+=============================================+
+| 192.168.20.40 | 0050.7966.680e | 172.16.147.205 | Et0/2  | access      | Building configuration...                   |
+|               |                |                |        |             |                                             |
+|               |                |                |        |             | Current configuration : 80 bytes            |
+|               |                |                |        |             | !                                           |
+|               |                |                |        |             | interface Ethernet0/2                       |
+|               |                |                |        |             |  switchport access vlan 20                  |
+|               |                |                |        |             |  switchport mode access                     |
+|               |                |                |        |             | end                                         |
+|               |                |                |        |             |                                             |
+|               |                |                |        |             |                                             |
+|               |                |                |        |             |           Mac Address Table                 |
+|               |                |                |        |             | ------------------------------------------- |
+|               |                |                |        |             |                                             |
+|               |                |                |        |             | Vlan    Mac Address       Type        Ports |
+|               |                |                |        |             | ----    -----------       --------    ----- |
+|               |                |                |        |             |   20    0050.7966.680e    DYNAMIC     Et0/2 |
+|               |                |                |        |             | Total Mac Addresses for this criterion: 1   |
++---------------+----------------+----------------+--------+-------------+---------------------------------------------+
+| 192.168.10.42 | 0050.7966.680d | 172.16.147.207 | Et0/2  | access      | Building configuration...                   |
+|               |                |                |        |             |                                             |
+|               |                |                |        |             | Current configuration : 80 bytes            |
+|               |                |                |        |             | !                                           |
+|               |                |                |        |             | interface Ethernet0/2                       |
+|               |                |                |        |             |  switchport access vlan 10                  |
+|               |                |                |        |             |  switchport mode access                     |
+|               |                |                |        |             | end                                         |
+|               |                |                |        |             |                                             |
+|               |                |                |        |             |                                             |
+|               |                |                |        |             |           Mac Address Table                 |
+|               |                |                |        |             | ------------------------------------------- |
+|               |                |                |        |             |                                             |
+|               |                |                |        |             | Vlan    Mac Address       Type        Ports |
+|               |                |                |        |             | ----    -----------       --------    ----- |
+|               |                |                |        |             |   10    0050.7966.680d    DYNAMIC     Et0/2 |
+|               |                |                |        |             | Total Mac Addresses for this criterion: 1   |
++---------------+----------------+----------------+--------+-------------+---------------------------------------------+
+
+In [11]:                                                                                                                     
