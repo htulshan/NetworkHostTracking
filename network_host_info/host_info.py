@@ -3,6 +3,8 @@ from concurrent.futures import ThreadPoolExecutor
 from itertools import repeat
 from collections import defaultdict, OrderedDict
 import logging
+from pprint import pprint
+import copy
 
 import yaml
 from netmiko import ConnectHandler
@@ -191,15 +193,20 @@ class TrackHost:
 
     def _netmiko_run_show(self, interface_data, commands):
 
-        if interface_data['port']:
-            new_commands = [command.replace('{}', interface_data['port']) for command in commands]
-            device_data = list(self._get_device_params(host=interface_data['switch']))
-            output = self._netmiko_connect_and_run(device_data[0], new_commands, text_fsm=False)
-            interface_data.update(show_command="\n".join(output))
-        else:
-            interface_data.update(show_command='NA')
+        switch, interfaces = interface_data
+        interface_list = list(interfaces)
+        command_list = [command.replace('{}', inter) for inter in interface_list for command in commands]
 
-        return interface_data
+        device_data = list(self._get_device_params(switch))
+        output = self._netmiko_connect_and_run(device_data[0], command_list, text_fsm=False)
+
+        len_of_commands = len(commands)
+        interface_output = [output[i:i + len_of_commands]
+                            for i in range(0, len(interface_list) * len_of_commands, len_of_commands)]
+
+        interface_dict = {inter: output for inter, output in zip(interface_list, interface_output)}
+
+        return switch, interface_dict
 
     def _command_and_print(self, tracking_data, commands):
         """
@@ -208,20 +215,25 @@ class TrackHost:
         :param commands: commands to run on the interfaces
         :return: None
         """
-        interface_data = []
+        switches_of_interest = defaultdict(set)
         for ip, data in tracking_data.items():
             for interface in data['interfaces']:
-                per_entry = {
-                    'IP': ip,
-                    'MAC': data['mac_address'],
-                }
-                per_entry.update(interface)
-                interface_data.append(per_entry)
+                if interface['switch']:
+                    switches_of_interest[interface.get('switch')].add(interface.get('port'))
 
         with ThreadPoolExecutor(max_workers=20) as executor:
-            result = list(executor.map(self._netmiko_run_show, interface_data, repeat(commands)))
+            result = list(executor.map(self._netmiko_run_show, switches_of_interest.items(), repeat(commands)))
 
-        print(tabulate(result, headers='keys', tablefmt="grid"))
+        result_dict = {switch: interfaces for switch, interfaces in result}
+
+        for ip, data in tracking_data.items():
+            for interface in data['interfaces']:
+                if interface['switch']:
+                    interface['show commands'] = "\n".join(result_dict[interface['switch']].get(interface['port']))
+                else:
+                    interface['show commands'] = 'NA'
+
+        self.print_data(tracking_data)
 
     def track(self, hosts, port_type='access'):
         """
@@ -248,13 +260,14 @@ class TrackHost:
         # for every host
         for host in hosts:
             host_interfaces = []
+            mac_mapping = copy.deepcopy(self._mac_address_tables)
 
             # check if arp entry is resolved
             host_mac = self._arp_tables.get(host, None)
 
             # if arp entry is resolved check the ports, access or trunk on which the mac is learnt
             if host_mac:
-                host_interfaces = self._mac_address_tables.get(host_mac, [])
+                host_interfaces = mac_mapping.get(host_mac, [])
 
             # extract access ports from the list of ports
             if port_type == 'access':
