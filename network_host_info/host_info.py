@@ -1,10 +1,10 @@
-from ipaddress import ip_address
+from ipaddress import ip_address, ip_network
 from concurrent.futures import ThreadPoolExecutor
 from itertools import repeat
 from collections import defaultdict, OrderedDict
 import logging
-from pprint import pprint
 import copy
+import csv
 
 import yaml
 from netmiko import ConnectHandler
@@ -191,6 +191,30 @@ class TrackHost:
 
         print(tabulate(table_print_data, headers='keys', tablefmt="grid"))
 
+    @staticmethod
+    def _export_to_csv(tracking_data):
+        """
+        To export the tracking data to tracking_data.csv file
+        :param tracking_data: the data to be printed
+        :return: None
+        """
+        csv_print_data = []
+        for ip, data in tracking_data.items():
+            for interface in data['interfaces']:
+                print_dict = {
+                    'IP': ip,
+                    'MAC': data['mac_address'],
+                }
+                print_dict.update(interface)
+                csv_print_data.append(print_dict)
+
+        with open('tracking_data.csv', 'w') as f:
+            writer = csv.DictWriter(
+                f, fieldnames=list(csv_print_data[0].keys()), quoting=csv.QUOTE_NONNUMERIC)
+            writer.writeheader()
+            for d in csv_print_data:
+                writer.writerow(d)
+
     def _netmiko_run_show(self, interface_data, commands):
 
         switch, interfaces = interface_data
@@ -233,7 +257,7 @@ class TrackHost:
                 else:
                     interface['show commands'] = 'NA'
 
-        self.print_data(tracking_data)
+        return tracking_data
 
     def track(self, hosts, port_type='access'):
         """
@@ -290,27 +314,51 @@ class TrackHost:
             host_access_ports.update(host_dict)
         return host_access_ports
 
-    def track_and_print(self, hosts, port_type='access'):
+    def track_and_print(self, hosts, export=False, port_type='access'):
         """
         to track the list of IP the user will provide and display the information on the terminal
+        :param export: to export result to csv
         :param hosts: list of IP address to be tracked
         :param port_type: default is access port however you can also use trunk or all ( both access and trunk ports )
         :return: None, print the tracking information in table format
         """
         tracking_data = self.track(hosts, port_type)
-        self.print_data(tracking_data)
+        if not export:
+            self.print_data(tracking_data)
+        else:
+            self._export_to_csv(tracking_data)
 
-    def track_command_print(self, hosts, commands, port_type='access'):
+    def track_command_print(self, hosts, commands, export=False, port_type='access'):
         """
         to track the list of IP the user will provide and run the list of show commands against those ports and display
         the information on the terminal in table format
+        :param export: to export result to csv
         :param hosts: list of IP addresses to be tracked
         :param commands: list of show commands to run, use '{}' to place the port id in the command.
         :param port_type: default is access port however you can also use trunk or all ( both access and trunk ports )
         :return: None, print the tracking information in table format
         """
         tracking_data = self.track(hosts, port_type)
-        self._command_and_print(tracking_data, commands)
+        tracking_data_command = self._command_and_print(tracking_data, commands)
+        if not export:
+            self.print_data(tracking_data_command)
+        else:
+            self._export_to_csv(tracking_data_command)
+
+    def track_subnet(self, subnet, export=False, port_type='access', *excluded):
+        """
+        to track a particular subnet IPs on the network
+        :param export:
+        :param subnet: ip subnet to be tracked in format x.x.x.x/y
+        :param port_type: type of port to be searched for, default is access
+        :param excluded: ips to be excluded from the search
+        :return: None
+        """
+        subnetrange = ip_network(subnet)
+        ips = list(map(str, subnetrange.hosts()))
+        ipsofinterset = [ip for ip in ips if ip not in excluded]
+
+        self.track_and_print(ipsofinterset, export, port_type)
 
     def load(self):
         """
