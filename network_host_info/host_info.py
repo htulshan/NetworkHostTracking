@@ -2,15 +2,11 @@ from ipaddress import ip_address, ip_network
 from concurrent.futures import ThreadPoolExecutor
 from itertools import repeat
 from collections import defaultdict, OrderedDict
-import logging
 import copy
 import csv
 
 import yaml
 from netmiko import ConnectHandler
-from tabulate import tabulate
-
-logging.basicConfig(format='%(message)s', level=logging.WARNING)
 
 
 class InvalidIP(Exception):
@@ -29,6 +25,7 @@ class TrackHost:
         self._mac_address_tables = defaultdict(list)  # to store the mac address to port bindings of all the mac
         # address in the network
         self._inventory_dict = {}  # to store the inventory file as a dictionary
+        self.error_logs = []
 
     def _load_inventory(self):
         """
@@ -103,7 +100,7 @@ class TrackHost:
         :return: list of command outputs from the device
         """
         output = []
-
+        self.error_logs.clear()
         # if the device in the inventory is not accessible return a empty list for its data
         try:
             ssh = ConnectHandler(**self.netmiko_device_data_parser(device_params))
@@ -112,7 +109,8 @@ class TrackHost:
                 output.append(ssh.send_command(command, use_textfsm=text_fsm))
 
         except Exception:
-            logging.warning(f"ERROR: Unable to connect to device {device_params['ip']}, this device will be skipped")
+            self.error_logs.append(
+                f"ERROR: Unable to connect to device {device_params['ip']}, this device will be skipped")
             output = []  # empty list
         else:
             ssh.disconnect()
@@ -189,7 +187,7 @@ class TrackHost:
                 print_dict.update(interface)
                 table_print_data.append(print_dict)
 
-        print(tabulate(table_print_data, headers='keys', tablefmt="grid"))
+        return table_print_data
 
     @staticmethod
     def _export_to_csv(tracking_data):
@@ -208,7 +206,7 @@ class TrackHost:
                 print_dict.update(interface)
                 csv_print_data.append(print_dict)
 
-        with open('tracking_data.csv', 'w') as f:
+        with open('static/report.csv', 'w') as f:
             writer = csv.DictWriter(
                 f, fieldnames=list(csv_print_data[0].keys()), quoting=csv.QUOTE_NONNUMERIC)
             writer.writeheader()
@@ -323,10 +321,10 @@ class TrackHost:
         :return: None, print the tracking information in table format
         """
         tracking_data = self.track(hosts, port_type)
-        if not export:
-            self.print_data(tracking_data)
-        else:
+        if export:
             self._export_to_csv(tracking_data)
+
+        return self.print_data(tracking_data)
 
     def track_command_print(self, hosts, commands, export=False, port_type='access'):
         """
@@ -340,12 +338,14 @@ class TrackHost:
         """
         tracking_data = self.track(hosts, port_type)
         tracking_data_command = self._command_and_print(tracking_data, commands)
-        if not export:
-            self.print_data(tracking_data_command)
-        else:
+        if export:
             self._export_to_csv(tracking_data_command)
 
-    def track_subnet(self, subnet, export=False, port_type='access', *excluded):
+        return self.print_data(tracking_data_command)
+
+
+
+    def track_subnet(self, subnet, export, port_type, *excluded):
         """
         to track a particular subnet IPs on the network
         :param export:
@@ -358,7 +358,10 @@ class TrackHost:
         ips = list(map(str, subnetrange.hosts()))
         ipsofinterset = [ip for ip in ips if ip not in excluded]
 
-        self.track_and_print(ipsofinterset, export, port_type)
+        data = self.track_and_print(ipsofinterset, export, port_type)
+        returndata = [foo for foo in data if foo['MAC']]
+
+        return returndata
 
     def load(self):
         """
@@ -368,3 +371,4 @@ class TrackHost:
         """
         self._load_inventory()  # to load the device inventory file.
         self._network_data_collection()  # to connect to the network devices and load all the data.
+        return self.error_logs

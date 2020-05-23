@@ -1,0 +1,146 @@
+"IP","MAC","switch","port","port_type","show commands"
+"192.168.20.40","0050.7966.680e","172.16.147.203","Et0/3","trunk","Building configuration...
+
+Current configuration : 90 bytes
+!
+interface Ethernet0/3
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+end
+
+Ethernet0/3 is up, line protocol is up (connected) 
+  Hardware is AmdP2, address is aabb.cc00.3030 (bia aabb.cc00.3030)
+  MTU 1500 bytes, BW 10000 Kbit/sec, DLY 1000 usec, 
+     reliability 255/255, txload 1/255, rxload 1/255
+  Encapsulation ARPA, loopback not set
+  Keepalive set (10 sec)
+  Auto-duplex, Auto-speed, media type is unknown
+  input flow-control is off, output flow-control is unsupported 
+  ARP type: ARPA, ARP Timeout 04:00:00
+  Last input 00:00:13, output 00:00:00, output hang never
+  Last clearing of ""show interface"" counters never
+  Input queue: 0/2000/0/0 (size/max/drops/flushes); Total output drops: 0
+  Queueing strategy: fifo
+  Output queue: 0/0 (size/max)
+  5 minute input rate 0 bits/sec, 0 packets/sec
+  5 minute output rate 2000 bits/sec, 5 packets/sec
+     4672 packets input, 612000 bytes, 0 no buffer
+     Received 822 broadcasts (0 multicasts)
+     0 runts, 0 giants, 0 throttles 
+     0 input errors, 0 CRC, 0 frame, 0 overrun, 0 ignored
+     0 input packets with dribble condition detected
+     71368 packets output, 5023020 bytes, 0 underruns
+     0 output errors, 0 collisions, 0 interface resets
+     0 unknown protocol drops
+     0 babbles, 0 late collision, 0 deferred
+     0 lost carrier, 0 no carrier
+     0 output buffer failures, 0 output buffers swapped out"
+"192.168.20.40","0050.7966.680e","172.16.147.205","Et0/2","access","Building configuration...
+
+Current configuration : 80 bytes
+!
+interface Ethernet0/2
+ switchport access vlan 20
+ switchport mode access
+end
+
+Ethernet0/2 is up, line protocol is up (connected) 
+  Hardware is AmdP2, address is aabb.cc00.5020 (bia aabb.cc00.5020)
+  MTU 1500 bytes, BW 10000 Kbit/sec, DLY 1000 usec, 
+     reliability 255/255, txload 1/255, rxload 1/255
+  Encapsulation ARPA, loopback not set
+  Keepalive set (10 sec)
+  Auto-duplex, Auto-speed, media type is unknown
+  input flow-control is off, output flow-control is unsupported 
+  ARP type: ARPA, ARP Timeout 04:00:00
+  Last input 00:00:11, output 00:00:00, output hang never
+  Last clearing of ""show interface"" counters never
+  Input queue: 0/2000/0/0 (size/max/drops/flushes); Total output drops: 0
+  Queueing strategy: fifo
+  Output queue: 0/0 (size/max)
+  5 minute input rate 0 bits/sec, 0 packets/sec
+  5 minute output rate 0 bits/sec, 0 packets/sec
+     3858 packets input, 439494 bytes, 0 no buffer
+     Received 8 broadcasts (0 multicasts)
+     0 runts, 0 giants, 0 throttles 
+     0 input errors, 0 CRC, 0 frame, 0 overrun, 0 ignored
+     0 input packets with dribble condition detected
+     22045 packets output, 1660949 bytes, 0 underruns
+     0 output errors, 0 collisions, 0 interface resets
+     0 unknown protocol drops
+     0 babbles, 0 late collision, 0 deferred
+     0 lost carrier, 0 no carrier
+     0 output buffer failures, 0 output buffers swapped out"
+"192.168.30.41","0050.7966.680f","172.16.147.203","Et1/0","trunk","Building configuration...
+
+Current configuration : 90 bytes
+!
+interface Ethernet1/0
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+end
+
+Ethernet1/0 is up, line protocol is up (connected) 
+  Hardware is AmdP2, address is aabb.cc00.3001 (bia aabb.cc00.3001)
+  MTU 1500 bytes, BW 10000 Kbit/sec, DLY 1000 usec, 
+     reliability 255/255, txload 1/255, rxload 1/255
+  Encapsulation ARPA, loopback not set
+  Keepalive set (10 sec)
+  Auto-duplex, Auto-speed, media type is unknown
+  input flow-control is off, output flow-control is unsupported 
+  ARP type: ARPA, ARP Timeout 04:00:00
+  Last input 00:00:10, output 00:00:00, output hang never
+  Last clearing of ""show interface"" counters never
+  Input queue: 0/2000/0/0 (size/max/drops/flushes); Total output drops: 0
+  Queueing strategy: fifo
+  Output queue: 0/0 (size/max)
+  5 minute input rate 0 bits/sec, 0 packets/sec
+  5 minute output rate 2000 bits/sec, 4 packets/sec
+     4682 packets input, 613082 bytes, 0 no buffer
+     Received 832 broadcasts (0 multicasts)
+     0 runts, 0 giants, 0 throttles 
+     0 input errors, 0 CRC, 0 frame, 0 overrun, 0 ignored
+     0 input packets with dribble condition detected
+     71362 packets output, 5022194 bytes, 0 underruns
+     0 output errors, 0 collisions, 0 interface resets
+     0 unknown protocol drops
+     0 babbles, 0 late collision, 0 deferred
+     0 lost carrier, 0 no carrier
+     0 output buffer failures, 0 output buffers swapped out"
+"192.168.30.41","0050.7966.680f","172.16.147.206","Et0/2","access","Building configuration...
+
+Current configuration : 80 bytes
+!
+interface Ethernet0/2
+ switchport access vlan 30
+ switchport mode access
+end
+
+Ethernet0/2 is up, line protocol is up (connected) 
+  Hardware is AmdP2, address is aabb.cc00.6020 (bia aabb.cc00.6020)
+  MTU 1500 bytes, BW 10000 Kbit/sec, DLY 1000 usec, 
+     reliability 255/255, txload 1/255, rxload 1/255
+  Encapsulation ARPA, loopback not set
+  Keepalive set (10 sec)
+  Auto-duplex, Auto-speed, media type is unknown
+  input flow-control is off, output flow-control is unsupported 
+  ARP type: ARPA, ARP Timeout 04:00:00
+  Last input 00:00:10, output 00:00:00, output hang never
+  Last clearing of ""show interface"" counters never
+  Input queue: 0/2000/0/0 (size/max/drops/flushes); Total output drops: 0
+  Queueing strategy: fifo
+  Output queue: 0/0 (size/max)
+  5 minute input rate 0 bits/sec, 0 packets/sec
+  5 minute output rate 0 bits/sec, 0 packets/sec
+     3858 packets input, 439494 bytes, 0 no buffer
+     Received 8 broadcasts (0 multicasts)
+     0 runts, 0 giants, 0 throttles 
+     0 input errors, 0 CRC, 0 frame, 0 overrun, 0 ignored
+     0 input packets with dribble condition detected
+     22033 packets output, 1660203 bytes, 0 underruns
+     0 output errors, 0 collisions, 0 interface resets
+     0 unknown protocol drops
+     0 babbles, 0 late collision, 0 deferred
+     0 lost carrier, 0 no carrier
+     0 output buffer failures, 0 output buffers swapped out"
+"192.168.20.41","","","","","NA"

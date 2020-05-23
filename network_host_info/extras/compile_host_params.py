@@ -1,7 +1,7 @@
 import yaml
 from ipaddress import ip_address
 
-with open('../inventory.yml') as f:
+with open('../../inventory.yml') as f:
     inventory_dict = yaml.safe_load(f)
 
 

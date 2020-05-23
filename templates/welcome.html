@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    <h1> Please select the operation you want to perform</h1>
+    <ul>
+        <li>
+            <a> Mandatory Operations </a>
+            <ul>
+                <li>
+                    <a href="{{ url_for('load_data') }}">Load Data</a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a> Host Tracking </a>
+            <ul>
+                <li>
+                    <a href="{{ url_for('trackhosts') }}">Track Hosts</a>
+                </li>
+                <li>
+                    <a href="{{ url_for('track_command') }}">Track hosts and run commands</a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a> Subnet Tracking </a>
+            <ul>
+                <li>
+                    <a href="{{ url_for('track_subnet') }}">Track Subnets</a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a> Inventory Options </a>
+            <ul>
+                <li>
+                    <a href="{{ url_for('inventory') }}">Display Inventory</a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+{% endblock %}
+
