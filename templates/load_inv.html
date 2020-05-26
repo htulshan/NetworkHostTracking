@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}Upload Inventory{% endblock %}
+
+{% block content %}
+    <h1> Upload a new Inventory file in YAML format. </h1>
+    <form method=post enctype=multipart/form-data>
+        <input type=file name=file>
+        <input type=submit value=Upload>
+    </form>
+    <br>
+    <br>
+    <button>
+        <a href="{{ url_for('welcome') }}">Home</a>
+    </button>
+{% endblock %}
+

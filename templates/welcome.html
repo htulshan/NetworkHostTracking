@@ -38,6 +38,12 @@
                 <li>
                     <a href="{{ url_for('inventory') }}">Display Inventory</a>
                 </li>
+                <li>
+                    <a href="{{ url_for('static', filename='inventory.yml') }}">Download Inventory</a>
+                </li>
+                <li>
+                    <a href="{{ url_for('load_inv') }}">Upload Inventory</a>
+                </li>
             </ul>
         </li>
     </ul>

@@ -15,7 +15,7 @@ class InvalidIP(Exception):
 
 class TrackHost:
 
-    def __init__(self, inventory='inventory.yml'):
+    def __init__(self, inventory='static/inventory.yml'):
         """
         initializes all the instance variables to there default values/
         :param inventory: non default inventory file path.
@@ -343,9 +343,7 @@ class TrackHost:
 
         return self.print_data(tracking_data_command)
 
-
-
-    def track_subnet(self, subnet, export, port_type, *excluded):
+    def track_subnet(self, subnet, export, port_type, excluded):
         """
         to track a particular subnet IPs on the network
         :param export:
@@ -356,6 +354,10 @@ class TrackHost:
         """
         subnetrange = ip_network(subnet)
         ips = list(map(str, subnetrange.hosts()))
+
+        if excluded and not all(map(self.check_if_ip_address, excluded)):
+            raise InvalidIP("Invalid IP entered")
+
         ipsofinterset = [ip for ip in ips if ip not in excluded]
 
         data = self.track_and_print(ipsofinterset, export, port_type)
