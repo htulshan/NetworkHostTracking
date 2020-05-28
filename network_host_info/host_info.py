@@ -100,7 +100,6 @@ class TrackHost:
         :return: list of command outputs from the device
         """
         output = []
-        self.error_logs.clear()
         # if the device in the inventory is not accessible return a empty list for its data
         try:
             ssh = ConnectHandler(**self.netmiko_device_data_parser(device_params))
@@ -157,6 +156,7 @@ class TrackHost:
         To connect to the devices in the network and collect relevant data for processing
         :return: None
         """
+        self.error_logs.clear()
         router_list = list(self._get_device_params('router'))
         with ThreadPoolExecutor(max_workers=5) as executor:
             result = executor.map(self._netmiko_connect_and_run, router_list, repeat(['show ip arp']))

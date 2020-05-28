@@ -1,5 +1,6 @@
 from network_host_info.host_info import TrackHost, InvalidIP
 from network_host_info.InventoryOperations import display_inventory
+import os
 
 from flask import Flask, render_template, request, jsonify, abort, redirect, url_for
 
@@ -28,7 +29,7 @@ def load_data():
 
 @app.route('/hosts/track', methods=['GET', 'POST'])
 def trackhosts():
-    global net
+
     if request.method == 'POST':
         ips = list(map(str.strip, request.form['ips'].split(',')))
         try:
@@ -47,8 +48,6 @@ def track_command():
             ips = list(map(str.strip, request.form['ips'].split(',')))
             commands = list(map(str.strip, request.form['commands'].split(',')))
             data = net.track_command_print(ips, commands, port_type=request.form['port_type'], export=True)
-            # for foo in data:
-            #    foo['show commands'] = foo['show commands'].replace('\n', '<br/>')
             return render_template('trackhostresult.html', data=data)
         except InvalidIP:
             abort(422)
@@ -59,7 +58,7 @@ def track_command():
 
 @app.route('/subnet/track', methods=['GET', 'POST'])
 def track_subnet():
-    global net
+
     if request.method == 'POST':
         subnet = request.form['subnet']
         eipsstr = request.form['eips']
