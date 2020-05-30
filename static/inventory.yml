@@ -41,3 +41,6 @@ hosts:
   172.16.240.212:
     groups:
       - switch
+  172.16.240.213:
+    groups:
+      - switch

@@ -2,6 +2,6 @@
 
 service nginx start
 cd /app
-gunicorn TrackHost:app
+gunicorn trackhost:app
 
 exec "$@"

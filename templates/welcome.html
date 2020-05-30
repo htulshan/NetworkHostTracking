@@ -9,7 +9,7 @@
             <a> Mandatory Operations </a>
             <ul>
                 <li>
-                    <a href="{{ url_for('load_data') }}">Load Data</a>
+                    <a href="{{ url_for('loaddata') }}">Load Data</a>
                 </li>
             </ul>
         </li>
@@ -20,7 +20,7 @@
                     <a href="{{ url_for('trackhosts') }}">Track Hosts</a>
                 </li>
                 <li>
-                    <a href="{{ url_for('track_command') }}">Track hosts and run commands</a>
+                    <a href="{{ url_for('trackcommand') }}">Track hosts and run commands</a>
                 </li>
             </ul>
         </li>
@@ -28,7 +28,7 @@
             <a> Subnet Tracking </a>
             <ul>
                 <li>
-                    <a href="{{ url_for('track_subnet') }}">Track Subnets</a>
+                    <a href="{{ url_for('tracksubnet') }}">Track Subnets</a>
                 </li>
             </ul>
         </li>
@@ -42,7 +42,7 @@
                     <a href="{{ url_for('static', filename='inventory.yml') }}">Download Inventory</a>
                 </li>
                 <li>
-                    <a href="{{ url_for('load_inv') }}">Upload Inventory</a>
+                    <a href="{{ url_for('loadinv') }}">Upload Inventory</a>
                 </li>
             </ul>
         </li>
