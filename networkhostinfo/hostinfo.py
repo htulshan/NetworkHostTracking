@@ -2,33 +2,33 @@ from ipaddress import ip_address, ip_network
 from concurrent.futures import ThreadPoolExecutor
 from itertools import repeat
 from collections import defaultdict, OrderedDict
-import logging
 import copy
 import csv
 
 import yaml
 from netmiko import ConnectHandler
-from tabulate import tabulate
-
-logging.basicConfig(format='%(message)s', level=logging.WARNING)
 
 
-class InvalidIP(Exception):
+class InvalidIPError(Exception):
     pass
 
 
 class TrackHost:
-
-    def __init__(self, inventory='inventory.yml'):
+    def __init__(self, inventory="static/inventory.yml"):
         """
         initializes all the instance variables to there default values/
         :param inventory: non default inventory file path.
         """
         self._inventory = inventory  # inventory file path
-        self._arp_tables = {}  # to store the arp table of all the routers in the network
-        self._mac_address_tables = defaultdict(list)  # to store the mac address to port bindings of all the mac
+        self._arp_tables = (
+            {}
+        )  # to store the arp table of all the routers in the network
+        self._mac_address_tables = defaultdict(
+            list
+        )  # to store the mac address to port bindings of all the mac
         # address in the network
         self._inventory_dict = {}  # to store the inventory file as a dictionary
+        self.error_logs = []
 
     def _load_inventory(self):
         """
@@ -52,28 +52,28 @@ class TrackHost:
         else:
             return True
 
-    def _get_device_params(self, host='all'):
+    def _get_device_params(self, host="all"):
         """
         to parse the inventory data and return list of devices with there params
         :param host: str: group name or individual device IP
         :return: iterator of devices with there params
         """
-        global_vars = self._inventory_dict['vars']
+        global_vars = self._inventory_dict["vars"]
 
         if not self.check_if_ip_address(host):
-            for host_ip, params in self._inventory_dict['hosts'].items():
-                if host in params['groups']:
+            for host_ip, params in self._inventory_dict["hosts"].items():
+                if host in params["groups"]:
                     host_dict = {}
                     host_dict.update(global_vars)
                     host_dict.update(ip=host_ip)
                     host_dict.update(params)
                     yield host_dict
         else:
-            if host in self._inventory_dict['hosts']:
+            if host in self._inventory_dict["hosts"]:
                 host_dict = {}
                 host_dict.update(global_vars)
                 host_dict.update(ip=host)
-                host_dict.update(self._inventory_dict['hosts'][host])
+                host_dict.update(self._inventory_dict["hosts"][host])
                 yield host_dict
             else:
                 raise KeyError("Host not found")
@@ -87,10 +87,10 @@ class TrackHost:
         """
         device_dict = {}
 
-        device_dict.update(host=device_params.get('ip'))
-        device_dict.update(device_type=device_params.get('device_type'))
-        device_dict.update(username=device_params.get('username'))
-        device_dict.update(password=device_params.get('password'))
+        device_dict.update(host=device_params.get("ip"))
+        device_dict.update(device_type=device_params.get("device_type"))
+        device_dict.update(username=device_params.get("username"))
+        device_dict.update(password=device_params.get("password"))
 
         return device_dict
 
@@ -103,7 +103,6 @@ class TrackHost:
         :return: list of command outputs from the device
         """
         output = []
-
         # if the device in the inventory is not accessible return a empty list for its data
         try:
             ssh = ConnectHandler(**self.netmiko_device_data_parser(device_params))
@@ -112,7 +111,9 @@ class TrackHost:
                 output.append(ssh.send_command(command, use_textfsm=text_fsm))
 
         except Exception:
-            logging.warning(f"ERROR: Unable to connect to device {device_params['ip']}, this device will be skipped")
+            self.error_logs.append(
+                f"ERROR: Unable to connect to device {device_params['ip']}, this device will be skipped"
+            )
             output = []  # empty list
         else:
             ssh.disconnect()
@@ -127,10 +128,12 @@ class TrackHost:
         :return: None
         """
         for device_arp_data in result:
-            if device_arp_data:  # to check if the arp data list is empty for a device which could mean that the
+            if (
+                device_arp_data
+            ):  # to check if the arp data list is empty for a device which could mean that the
                 # device is not accessible
                 for arp_entry in device_arp_data[0]:
-                    self._arp_tables.update({arp_entry['address']: arp_entry['mac']})
+                    self._arp_tables.update({arp_entry["address"]: arp_entry["mac"]})
 
     def _manipulating_mac_data(self, switch_list, switch_data):
         """
@@ -141,35 +144,50 @@ class TrackHost:
         :return: None
         """
         for data, switch_params in zip(switch_data, switch_list):
-            if data:  # to check if the data list for a device is empty or not which could mean that the device
+            if (
+                data
+            ):  # to check if the data list for a device is empty or not which could mean that the device
                 # was not accessible
                 int_dict = {}
                 for int_entry in data[1]:
-                    int_dict.update({int_entry['port']: int_entry['vlan']})
+                    int_dict.update({int_entry["port"]: int_entry["vlan"]})
 
                 for mac_entry in data[0]:
-                    port_type = 'trunk' if int_dict[mac_entry['destination_port']] == 'trunk' else 'access'
-                    foo_dict = OrderedDict(switch=switch_params['ip'],
-                                           port=mac_entry['destination_port'],
-                                           port_type=port_type)
-                    self._mac_address_tables[mac_entry['destination_address']].append(OrderedDict(foo_dict))
+                    port_type = (
+                        "trunk"
+                        if int_dict[mac_entry["destination_port"]] == "trunk"
+                        else "access"
+                    )
+                    foo_dict = OrderedDict(
+                        switch=switch_params["ip"],
+                        port=mac_entry["destination_port"],
+                        port_type=port_type,
+                    )
+                    self._mac_address_tables[mac_entry["destination_address"]].append(
+                        OrderedDict(foo_dict)
+                    )
 
     def _network_data_collection(self):
         """
         To connect to the devices in the network and collect relevant data for processing
         :return: None
         """
-        router_list = list(self._get_device_params('router'))
+        self.error_logs.clear()
+        router_list = list(self._get_device_params("router"))
         with ThreadPoolExecutor(max_workers=5) as executor:
-            result = executor.map(self._netmiko_connect_and_run, router_list, repeat(['show ip arp']))
+            result = executor.map(
+                self._netmiko_connect_and_run, router_list, repeat(["show ip arp"])
+            )
             # to manipulate the collected arp data in desired form for further processing
             self._manipulating_arp_data(result)
 
-        switch_list = list(self._get_device_params('switch'))
+        switch_list = list(self._get_device_params("switch"))
         with ThreadPoolExecutor(max_workers=10) as executor:
-            result = executor.map(self._netmiko_connect_and_run,
-                                  switch_list,
-                                  repeat(["show mac address-table", "show int status"]))
+            result = executor.map(
+                self._netmiko_connect_and_run,
+                switch_list,
+                repeat(["show mac address-table", "show int status"]),
+            )
             # to manipulate the collected mac and interface data in desired form for further processing
             self._manipulating_mac_data(switch_list, result)
 
@@ -181,15 +199,15 @@ class TrackHost:
         """
         table_print_data = []
         for ip, data in tracking_data.items():
-            for interface in data['interfaces']:
+            for interface in data["interfaces"]:
                 print_dict = {
-                    'IP': ip,
-                    'MAC': data['mac_address'],
+                    "IP": ip,
+                    "MAC": data["mac_address"],
                 }
                 print_dict.update(interface)
                 table_print_data.append(print_dict)
 
-        print(tabulate(table_print_data, headers='keys', tablefmt="grid"))
+        return table_print_data
 
     @staticmethod
     def _export_to_csv(tracking_data):
@@ -200,17 +218,20 @@ class TrackHost:
         """
         csv_print_data = []
         for ip, data in tracking_data.items():
-            for interface in data['interfaces']:
+            for interface in data["interfaces"]:
                 print_dict = {
-                    'IP': ip,
-                    'MAC': data['mac_address'],
+                    "IP": ip,
+                    "MAC": data["mac_address"],
                 }
                 print_dict.update(interface)
                 csv_print_data.append(print_dict)
 
-        with open('tracking_data.csv', 'w') as f:
+        with open("static/report.csv", "w") as f:
             writer = csv.DictWriter(
-                f, fieldnames=list(csv_print_data[0].keys()), quoting=csv.QUOTE_NONNUMERIC)
+                f,
+                fieldnames=list(csv_print_data[0].keys()),
+                quoting=csv.QUOTE_NONNUMERIC,
+            )
             writer.writeheader()
             for d in csv_print_data:
                 writer.writerow(d)
@@ -219,16 +240,26 @@ class TrackHost:
 
         switch, interfaces = interface_data
         interface_list = list(interfaces)
-        command_list = [command.replace('{}', inter) for inter in interface_list for command in commands]
+        command_list = [
+            command.replace("{}", inter)
+            for inter in interface_list
+            for command in commands
+        ]
 
         device_data = list(self._get_device_params(switch))
-        output = self._netmiko_connect_and_run(device_data[0], command_list, text_fsm=False)
+        output = self._netmiko_connect_and_run(
+            device_data[0], command_list, text_fsm=False
+        )
 
         len_of_commands = len(commands)
-        interface_output = [output[i:i + len_of_commands]
-                            for i in range(0, len(interface_list) * len_of_commands, len_of_commands)]
+        interface_output = [
+            output[i : i + len_of_commands]
+            for i in range(0, len(interface_list) * len_of_commands, len_of_commands)
+        ]
 
-        interface_dict = {inter: output for inter, output in zip(interface_list, interface_output)}
+        interface_dict = {
+            inter: output for inter, output in zip(interface_list, interface_output)
+        }
 
         return switch, interface_dict
 
@@ -241,25 +272,35 @@ class TrackHost:
         """
         switches_of_interest = defaultdict(set)
         for ip, data in tracking_data.items():
-            for interface in data['interfaces']:
-                if interface['switch']:
-                    switches_of_interest[interface.get('switch')].add(interface.get('port'))
+            for interface in data["interfaces"]:
+                if interface["switch"]:
+                    switches_of_interest[interface.get("switch")].add(
+                        interface.get("port")
+                    )
 
         with ThreadPoolExecutor(max_workers=20) as executor:
-            result = list(executor.map(self._netmiko_run_show, switches_of_interest.items(), repeat(commands)))
+            result = list(
+                executor.map(
+                    self._netmiko_run_show,
+                    switches_of_interest.items(),
+                    repeat(commands),
+                )
+            )
 
         result_dict = {switch: interfaces for switch, interfaces in result}
 
         for ip, data in tracking_data.items():
-            for interface in data['interfaces']:
-                if interface['switch']:
-                    interface['show commands'] = "\n".join(result_dict[interface['switch']].get(interface['port']))
+            for interface in data["interfaces"]:
+                if interface["switch"]:
+                    interface["show commands"] = "\n".join(
+                        result_dict[interface["switch"]].get(interface["port"])
+                    )
                 else:
-                    interface['show commands'] = 'NA'
+                    interface["show commands"] = "NA"
 
         return tracking_data
 
-    def track(self, hosts, port_type='access'):
+    def track(self, hosts, port_type="access"):
         """
         To check if a particular IP has its mac resolved and collect all the access interfaces
         where this mac address is being learnt
@@ -279,7 +320,7 @@ class TrackHost:
         host_access_ports = {}
 
         if not all(map(self.check_if_ip_address, hosts)):
-            raise InvalidIP("Invalid IP entered")
+            raise InvalidIPError("Invalid IP entered")
 
         # for every host
         for host in hosts:
@@ -294,27 +335,29 @@ class TrackHost:
                 host_interfaces = mac_mapping.get(host_mac, [])
 
             # extract access ports from the list of ports
-            if port_type == 'access':
-                host_interface_list = list(filter(lambda x: x['port_type'] == 'access', host_interfaces))
-            elif port_type == 'trunk':
-                host_interface_list = list(filter(lambda x: x['port_type'] == 'trunk', host_interfaces))
+            if port_type == "access":
+                host_interface_list = list(
+                    filter(lambda x: x["port_type"] == "access", host_interfaces)
+                )
+            elif port_type == "trunk":
+                host_interface_list = list(
+                    filter(lambda x: x["port_type"] == "trunk", host_interfaces)
+                )
             else:
                 host_interface_list = host_interfaces
 
             if not host_interface_list:
-                host_interface_list = [OrderedDict(switch=None,
-                                                   port=None,
-                                                   port_type=None)]
-            host_dict = {host:
-                {
-                    'mac_address': host_mac,
-                    'interfaces': host_interface_list
-                }}
+                host_interface_list = [
+                    OrderedDict(switch=None, port=None, port_type=None)
+                ]
+            host_dict = {
+                host: {"mac_address": host_mac, "interfaces": host_interface_list}
+            }
 
             host_access_ports.update(host_dict)
         return host_access_ports
 
-    def track_and_print(self, hosts, export=False, port_type='access'):
+    def track_and_print(self, hosts, export=False, port_type="access"):
         """
         to track the list of IP the user will provide and display the information on the terminal
         :param export: to export result to csv
@@ -323,12 +366,12 @@ class TrackHost:
         :return: None, print the tracking information in table format
         """
         tracking_data = self.track(hosts, port_type)
-        if not export:
-            self.print_data(tracking_data)
-        else:
+        if export:
             self._export_to_csv(tracking_data)
 
-    def track_command_print(self, hosts, commands, export=False, port_type='access'):
+        return self.print_data(tracking_data)
+
+    def track_command_print(self, hosts, commands, export=False, port_type="access"):
         """
         to track the list of IP the user will provide and run the list of show commands against those ports and display
         the information on the terminal in table format
@@ -340,12 +383,12 @@ class TrackHost:
         """
         tracking_data = self.track(hosts, port_type)
         tracking_data_command = self._command_and_print(tracking_data, commands)
-        if not export:
-            self.print_data(tracking_data_command)
-        else:
+        if export:
             self._export_to_csv(tracking_data_command)
 
-    def track_subnet(self, subnet, export=False, port_type='access', *excluded):
+        return self.print_data(tracking_data_command)
+
+    def track_subnet(self, subnet, export, port_type, excluded):
         """
         to track a particular subnet IPs on the network
         :param export:
@@ -356,9 +399,16 @@ class TrackHost:
         """
         subnetrange = ip_network(subnet)
         ips = list(map(str, subnetrange.hosts()))
+
+        if excluded and not all(map(self.check_if_ip_address, excluded)):
+            raise InvalidIPError("Invalid IP entered")
+
         ipsofinterset = [ip for ip in ips if ip not in excluded]
 
-        self.track_and_print(ipsofinterset, export, port_type)
+        data = self.track_and_print(ipsofinterset, export, port_type)
+        returndata = [foo for foo in data if foo["MAC"]]
+
+        return returndata
 
     def load(self):
         """
@@ -368,3 +418,4 @@ class TrackHost:
         """
         self._load_inventory()  # to load the device inventory file.
         self._network_data_collection()  # to connect to the network devices and load all the data.
+        return self.error_logs

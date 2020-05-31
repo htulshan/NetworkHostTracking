@@ -1,0 +1,12 @@
+version: "3"
+
+services:
+  track_host:
+    build: .
+    volumes:
+      - ".:/app"
+    env_file:
+      - 'dockerfiles/.env'
+    ports:
+      - "80:80"
+

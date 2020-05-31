@@ -3,41 +3,44 @@ vars:
   password: cisco
   device_type: cisco_ios_telnet
 hosts:
-  172.16.147.201:
+  172.16.240.201:
     groups:
       - router
     device_type: cisco_ios
-  172.16.147.202:
+  172.16.240.202:
     groups:
       - router
     device_type: cisco_ios
-  172.16.147.203:
+  172.16.240.203:
     groups:
       - switch
-  172.16.147.204:
+  172.16.240.204:
     groups:
       - switch
-  172.16.147.205:
+  172.16.240.205:
     groups:
       - switch
-  172.16.147.206:
+  172.16.240.206:
     groups:
       - switch
-  172.16.147.207:
+  172.16.240.207:
     groups:
       - switch
-  172.16.147.208:
+  172.16.240.208:
     groups:
       - switch
-  172.16.147.209:
+  172.16.240.209:
     groups:
       - switch
-  172.16.147.210:
+  172.16.240.210:
     groups:
       - switch
-  172.16.147.211:
+  172.16.240.211:
     groups:
       - switch
-  172.16.147.212:
+  172.16.240.212:
+    groups:
+      - switch
+  172.16.240.213:
     groups:
       - switch

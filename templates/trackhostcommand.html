@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Track Host{% endblock %}
+
+{% block content %}
+    <h1> Enter comma separated list of IPs and commands to be Tracked</h1>
+        <form method="post">
+            <p>
+                IPS:
+                <input type="text" name="ips">
+            </p>
+            <p>
+                Commands:
+                <input type="text" name="commands">
+            </p>
+            <p>
+                Port Type:
+                <select name="port_type">
+                  <option value="access">Access</option>
+                  <option value="trunk">Trunk</option>
+                  <option value="all">All</option>
+                </select>
+            </p>
+            <button type="submit">Track</button>
+        </form>
+    <br>
+    <br>
+    <button>
+        <a href="{{ url_for('welcome') }}">Home</a>
+    </button>
+{% endblock %}
