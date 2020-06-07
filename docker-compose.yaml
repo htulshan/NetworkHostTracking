@@ -1,12 +1,21 @@
 version: "3"
 
 services:
-  track_host:
-    build: .
-    volumes:
-      - ".:/app"
-    env_file:
-      - 'dockerfiles/.env'
+  web:
+    build:
+      context: "."
+      dockerfile: app_dockerfile
+    image: "ubuntu:hosttracking"
+    # depends_on:
+    #  - db
+
+  proxy:
+    build:
+      context: "."
+      dockerfile: nginx_dockerfile
+    image: "nginx:hosttracking"
+    depends_on:
+      - web
     ports:
       - "80:80"
 
