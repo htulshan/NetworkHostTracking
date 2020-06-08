@@ -36,13 +36,13 @@
             <a> Inventory Options </a>
             <ul>
                 <li>
-                    <a href="{{ url_for('inventory') }}">Display Inventory</a>
+                    <a href="{{ url_for('show_all_devices') }}">Show All Devices</a>
                 </li>
                 <li>
-                    <a href="{{ url_for('static', filename='inventory.yml') }}">Download Inventory</a>
+                    <a href="{{ url_for('show_device') }}">Show Device</a>
                 </li>
                 <li>
-                    <a href="{{ url_for('loadinv') }}">Upload Inventory</a>
+                    <a href="{{ url_for('add_device') }}">Add Device</a>
                 </li>
             </ul>
         </li>

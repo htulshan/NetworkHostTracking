@@ -6,8 +6,20 @@ services:
       context: "."
       dockerfile: app_dockerfile
     image: "ubuntu:hosttracking"
-    # depends_on:
-    #  - db
+    depends_on:
+      - db
+    environment:
+      FLASK_APP: trackhost
+      FLASK_ENV: development
+    volumes:
+    - "$PWD/src:/app"
+
+  db:
+    image: "mysql:latest"
+    command: "--default-authentication-plugin=mysql_native_password"
+    environment:
+      MYSQL_ROOT_PASSWORD: "mysql"
+      MYSQL_DATABASE: "inventory_db"
 
   proxy:
     build:

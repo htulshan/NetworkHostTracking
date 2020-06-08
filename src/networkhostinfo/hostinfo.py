@@ -8,6 +8,8 @@ import csv
 import yaml
 from netmiko import ConnectHandler
 
+from ..database.database import DataBase
+
 
 class InvalidIPError(Exception):
     pass
@@ -19,6 +21,7 @@ class TrackHost:
         initializes all the instance variables to there default values/
         :param inventory: non default inventory file path.
         """
+        self.db = DataBase("mysql://root:mysql@db/inventory_db")
         self._inventory = inventory  # inventory file path
         self._arp_tables = (
             {}
@@ -29,6 +32,8 @@ class TrackHost:
         # address in the network
         self._inventory_dict = {}  # to store the inventory file as a dictionary
         self.error_logs = []
+        self.username = "admin"
+        self.password = "cisco"
 
     def _load_inventory(self):
         """
@@ -52,29 +57,32 @@ class TrackHost:
         else:
             return True
 
-    def _get_device_params(self, host="all"):
-        """
-        to parse the inventory data and return list of devices with there params
-        :param host: str: group name or individual device IP
-        :return: iterator of devices with there params
-        """
-        global_vars = self._inventory_dict["vars"]
-
+    def _get_devices(self, host):
+        self.db.connect()
         if not self.check_if_ip_address(host):
-            for host_ip, params in self._inventory_dict["hosts"].items():
-                if host in params["groups"]:
-                    host_dict = {}
-                    host_dict.update(global_vars)
-                    host_dict.update(ip=host_ip)
-                    host_dict.update(params)
-                    yield host_dict
+            hosts = self.db.select_groups(host, "both")
+            self.db.disconnect()
+            for host in hosts:
+                device_data = dict(host)
+                device_data.update(
+                    ip=device_data["address"],
+                    username=self.username,
+                    password=self.password,
+                )
+                device_data.pop("address")
+                yield device_data
         else:
-            if host in self._inventory_dict["hosts"]:
-                host_dict = {}
-                host_dict.update(global_vars)
-                host_dict.update(ip=host)
-                host_dict.update(self._inventory_dict["hosts"][host])
-                yield host_dict
+            host = self.db.select_one(host)
+            self.db.disconnect()
+            if host:
+                device_data = dict(host)
+                device_data.update(
+                    ip=device_data["address"],
+                    username=self.username,
+                    password=self.password,
+                )
+                device_data.pop("address")
+                yield device_data
             else:
                 raise KeyError("Host not found")
 
@@ -173,7 +181,7 @@ class TrackHost:
         :return: None
         """
         self.error_logs.clear()
-        router_list = list(self._get_device_params("router"))
+        router_list = list(self._get_devices("router"))
         with ThreadPoolExecutor(max_workers=5) as executor:
             result = executor.map(
                 self._netmiko_connect_and_run, router_list, repeat(["show ip arp"])
@@ -181,7 +189,7 @@ class TrackHost:
             # to manipulate the collected arp data in desired form for further processing
             self._manipulating_arp_data(result)
 
-        switch_list = list(self._get_device_params("switch"))
+        switch_list = list(self._get_devices("switch"))
         with ThreadPoolExecutor(max_workers=10) as executor:
             result = executor.map(
                 self._netmiko_connect_and_run,
@@ -246,7 +254,7 @@ class TrackHost:
             for command in commands
         ]
 
-        device_data = list(self._get_device_params(switch))
+        device_data = list(self._get_devices("switch"))
         output = self._netmiko_connect_and_run(
             device_data[0], command_list, text_fsm=False
         )
