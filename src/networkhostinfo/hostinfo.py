@@ -5,7 +5,6 @@ from collections import defaultdict, OrderedDict
 import copy
 import csv
 
-import yaml
 from netmiko import ConnectHandler
 
 from ..database.database import DataBase
@@ -16,32 +15,19 @@ class InvalidIPError(Exception):
 
 
 class TrackHost:
-    def __init__(self, inventory="static/inventory.yml"):
+    def __init__(self):
         """
         initializes all the instance variables to there default values/
-        :param inventory: non default inventory file path.
         """
         self.db = DataBase("mysql://root:mysql@db/inventory_db")
-        self._inventory = inventory  # inventory file path
-        self._arp_tables = (
-            {}
-        )  # to store the arp table of all the routers in the network
-        self._mac_address_tables = defaultdict(
-            list
-        )  # to store the mac address to port bindings of all the mac
+        self._arp_tables = {}
+        # to store the arp table of all the routers in the network
+        self._mac_address_tables = defaultdict(list)
+        # to store the mac address to port bindings of all the mac
         # address in the network
-        self._inventory_dict = {}  # to store the inventory file as a dictionary
         self.error_logs = []
         self.username = "admin"
         self.password = "cisco"
-
-    def _load_inventory(self):
-        """
-        Loads device inventory file and assigns it to dictionary self.inventory
-        :return: None
-        """
-        with open(self._inventory) as f:
-            self._inventory_dict = yaml.safe_load(f)
 
     @staticmethod
     def check_if_ip_address(ip):
@@ -136,9 +122,8 @@ class TrackHost:
         :return: None
         """
         for device_arp_data in result:
-            if (
-                device_arp_data
-            ):  # to check if the arp data list is empty for a device which could mean that the
+            if device_arp_data:
+                # to check if the arp data list is empty for a device which could mean that the
                 # device is not accessible
                 for arp_entry in device_arp_data[0]:
                     self._arp_tables.update({arp_entry["address"]: arp_entry["mac"]})
@@ -152,9 +137,8 @@ class TrackHost:
         :return: None
         """
         for data, switch_params in zip(switch_data, switch_list):
-            if (
-                data
-            ):  # to check if the data list for a device is empty or not which could mean that the device
+            if data:
+                # to check if the data list for a device is empty or not which could mean that the device
                 # was not accessible
                 int_dict = {}
                 for int_entry in data[1]:
@@ -261,7 +245,7 @@ class TrackHost:
 
         len_of_commands = len(commands)
         interface_output = [
-            output[i : i + len_of_commands]
+            output[i: i + len_of_commands]
             for i in range(0, len(interface_list) * len_of_commands, len_of_commands)
         ]
 
@@ -424,6 +408,5 @@ class TrackHost:
         example: arp table from devices in the router group and mac address table from devices in the switch group.
         :return: None
         """
-        self._load_inventory()  # to load the device inventory file.
         self._network_data_collection()  # to connect to the network devices and load all the data.
         return self.error_logs

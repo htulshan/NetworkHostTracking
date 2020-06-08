@@ -3,7 +3,7 @@
 from ipaddress import ip_address
 import csv
 
-from flask import Flask, render_template, request, jsonify, abort, redirect, url_for
+from flask import Flask, render_template, request, abort, redirect, url_for
 from sqlalchemy import exc
 
 from .networkhostinfo.hostinfo import TrackHost, InvalidIPError
